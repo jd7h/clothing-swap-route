@@ -37,3 +37,21 @@ Now the the files will be formatted at every `git commit`.
 This code in this repository has a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license.
 This license requires that reusers give credit to the creator(s). It allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, for noncommercial purposes only. If others modify or adapt the material, they must license the modified material under identical terms.
 
+## External resources
+
+The main program from this repository may use the [public OSRM service](https://routing.openstreetmap.de/about.html) by
+[FOSSGIS](https://www.fossgis.de/). They offer routing services under [certain
+conditions](https://www.fossgis.de/arbeitsgruppen/osm-server/nutzungsbedingungen/), to name a few (technical) ones:
+
+- a valid HTTP User-Agent
+- a maximum of one request per second
+- commercial usage prohibited, unless they do not constitute an essential part of the commercial offer
+- no high volume
+- no bulk downloading of data
+
+The main program in this repository respects these conditions. Consequently, the execution of the program may take a while. Please
+do not change the limitations in place to keep the provider of this service happy.
+
+Furthermore, the data provided is © [OpenStreetMap](https://www.openstreetmap.org/copyright) and their contributors under
+[ODbL](https://opendatacommons.org/licenses/odbl/index.html) and [CC-BY-SA](https://creativecommons.org/licenses/by-sa/2.0/).
+Please contribute to OpenStreetMap by [fixing the map](https://openstreetmap.org/fixthemap).

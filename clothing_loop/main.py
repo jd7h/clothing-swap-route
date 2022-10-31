@@ -6,6 +6,7 @@ from argparse import ArgumentParser
 
 from data_io import read_participants
 from locations import get_locations
+from osrm import get_route
 
 
 def init_argument_parser():
@@ -40,6 +41,14 @@ def init_argument_parser():
         help="Store the output CSV in this filename, or - for standard output, default: %(default)s",
         default="-",
     )
+    argparser.add_argument(
+        "-r",
+        "--route",
+        dest="fetchroute",
+        help="Query OSRM for routing decisions, default: %(default)s",
+        action="store_true",
+        default=False,
+    )
     return argparser
 
 
@@ -56,6 +65,7 @@ def main():
         print(f"[DBG] read_participants({args.infile}):", file=sys.stderr)
         pprint.pprint(participants, stream=sys.stderr)
 
+    locations = []
     if args.fetchosm:
         if args.debug:
             print(
@@ -66,6 +76,18 @@ def main():
         if args.debug:
             print("[DBG] get_locations(participants):", file=sys.stderr)
             pprint.pprint(locations, stream=sys.stderr)
+
+    if args.fetchroute:
+        wps = [
+            {"latitude": loc.latitude, "longitude": loc.longitude} for loc in locations
+        ]
+        if args.debug:
+            print(wps)
+        distance = get_route(wps)
+        print(f"Expected distance: {distance} meters")
+        print(
+            "Routing provided by FOSSGIS, data © OpenStreetMap, ODbL, CC-BY-SA, contribute: https://openstreetmap.org/fixthemap"
+        )
 
 
 if __name__ == "__main__":
