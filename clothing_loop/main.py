@@ -5,6 +5,7 @@ import sys
 from argparse import ArgumentParser
 
 from data_io import read_participants
+from locations import get_locations
 
 
 def init_argument_parser():
@@ -16,6 +17,14 @@ def init_argument_parser():
         dest="debug",
         action="store_true",
         help="Output intermediate debugging lines to standard error, default: %(default)s",
+        default=False,
+    )
+    argparser.add_argument(
+        "-g",
+        "--get-osm-data",
+        dest="fetchosm",
+        action="store_true",
+        help="Query OpenStreetMaps for address details, default: %(default)s",
         default=False,
     )
     argparser.add_argument(
@@ -46,6 +55,17 @@ def main():
     if args.debug:
         print(f"[DBG] read_participants({args.infile}):", file=sys.stderr)
         pprint.pprint(participants, stream=sys.stderr)
+
+    if args.fetchosm:
+        if args.debug:
+            print(
+                f"Fetching locations for {len(participants)}, this takes about {len(participants)*2} seconds",
+                file=sys.stderr,
+            )
+        locations = get_locations(participants)
+        if args.debug:
+            print("[DBG] get_locations(participants):", file=sys.stderr)
+            pprint.pprint(locations, stream=sys.stderr)
 
 
 if __name__ == "__main__":
