@@ -4,7 +4,7 @@ import sys
 import pprint
 
 from argparse import ArgumentParser
-from routing import read_participants
+from data_io import read_participants
 
 def init_argument_parser():
     argparser = ArgumentParser()

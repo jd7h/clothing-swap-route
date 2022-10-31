@@ -1,11 +1,20 @@
-import csv
-import sys
+import numpy as np
+from python_tsp.heuristics import solve_tsp_local_search, solve_tsp_simulated_annealing
 
-from os import path
+def distance_matrix(locations):
+    """create a distance matrix with the distance from every participant to every participant. We loop over locations twice"""
+    return np.array([[distance.distance(location.point, location_.point) for location_ in locations] for location in locations])
 
-def read_participants(filename):
-    with open(filename, newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
-        participants = [row for row in reader]
+def tsp_solution(distance_matrix):
+    """Try the 2 recommended approaches from the python-tsp manual and return the best result"""
+    permutation, distance = solve_tsp_simulated_annealing(distance_matrix)
+    permutation2, distance2 = solve_tsp_local_search(
+        distance_matrix, x0=permutation, perturbation_scheme="ps3"
+    )
+    if distance < distance2:
+        return permutation, distance
+    return permutation2, distance2
 
-    return participants
+def route(locations):
+    """Compute (an approximation of) the shortest route through all points, returning at the first point."""
+    return tsp_solution(distance_matrix(locations))
