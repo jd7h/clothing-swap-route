@@ -26,6 +26,13 @@ Please refer to the [documentation of `pip`](https://pip.pypa.io/en/stable/insta
 ## Contributions
 Contributions are welcome. :)
 
+Be sure to install the pre-commit hook so that all our files are formatted in the same way:
+
+1. Open the virtual environment and install requirements with `pip install -r requirements`
+2. Install the pre-commit with `pre-commit install`
+
+Now the the files will be formatted at every `git commit`. 
+
 ## License
 This code in this repository has a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license.
 This license requires that reusers give credit to the creator(s). It allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, for noncommercial purposes only. If others modify or adapt the material, they must license the modified material under identical terms.
