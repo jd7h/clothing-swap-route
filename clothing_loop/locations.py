@@ -2,20 +2,24 @@ import logging
 from random import randint
 
 from geopy.distance import distance, geodesic
-from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderServiceError, GeocoderTimedOut
 from geopy.extra.rate_limiter import RateLimiter
-from geopy.exc import GeocoderTimedOut, GeocoderServiceError
+from geopy.geocoders import Nominatim
+
 
 def build_query_from_participant(participant):
     return ", ".join(
-            [participant.get('address'), 
-            participant.get('postalcode'), 
-            participant.get('city'), 
-            participant.get('country')]
-        )
+        [
+            participant.get("address"),
+            participant.get("postalcode"),
+            participant.get("city"),
+            participant.get("country"),
+        ]
+    )
+
 
 def get_locations(participants):
-    user_agent = "clothing_loop_{}".format(randint(10000,99999))
+    user_agent = "clothing_loop_{}".format(randint(10000, 99999))
     geolocator = Nominatim(user_agent=user_agent)
     geocode = RateLimiter(geolocator.geocode, min_delay_seconds=2)
 
