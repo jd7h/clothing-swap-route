@@ -7,8 +7,22 @@ import requests
 OSRM_ENDPOINT = "https://routing.openstreetmap.de/routed-foot/route/v1/driving/"
 OSRM_LAST_REQUEST = None
 
+# print statement at import
+print(
+    "Routing provided by FOSSGIS, data © OpenStreetMap, ODbL, CC-BY-SA, contribute: https://openstreetmap.org/fixthemap"
+)
 
-def get_route(waypoints):
+
+def get_route(locations):
+    if len(locations) <= 1:
+        raise Exception("Need at least 2 waypoints to get a route")
+
+    formatted_locs = [f"{loc.longitude},{loc.latitude}" for loc in locations]
+    uri = ";".join(formatted_locs)
+    return osrm_parse(osrm_request(uri))
+
+
+def get_route_(waypoints):
     if len(waypoints) <= 1:
         raise Exception("Need at least 2 waypoints to get a route")
 
@@ -26,6 +40,7 @@ def get_route(waypoints):
 def osrm_parse(req_json):
     # TODO: parse req_json.code
     # TODO: check for number of returned routes
+    # return req_json
     return req_json["routes"][0]["distance"]
 
 

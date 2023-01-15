@@ -4,9 +4,10 @@ import pprint
 import sys
 from argparse import ArgumentParser
 
-from data_io import read_participants
-from locations import get_locations
-from osrm import get_route
+import data_io
+import locations
+import osrm
+import routing
 
 
 def init_argument_parser():
@@ -52,6 +53,13 @@ def init_argument_parser():
     return argparser
 
 
+def test_flow(infile="example_data/participants.csv"):
+    participants = data_io.read_participants(infile)
+    locationlist = locations.get_locations(participants)
+    solution = routing.get_route(locationlist, True)
+    return participants, locations, solution
+
+
 def main():
     argparser = init_argument_parser()
     args = argparser.parse_args()
@@ -60,34 +68,32 @@ def main():
         argparser.print_help()
         sys.exit(0)
 
-    participants = read_participants(args.infile)
+    participants = data_io.read_participants(args.infile)
     if args.debug:
-        print(f"[DBG] read_participants({args.infile}):", file=sys.stderr)
+        print(f"[DBG] data_io.read_participants({args.infile}):", file=sys.stderr)
         pprint.pprint(participants, stream=sys.stderr)
 
-    locations = []
+    locationlist = []
     if args.fetchosm:
         if args.debug:
             print(
                 f"Fetching locations for {len(participants)}, this takes about {len(participants)*2} seconds",
                 file=sys.stderr,
             )
-        locations = get_locations(participants)
+        locationlist = locations.get_locations(participants, args.debug)
         if args.debug:
-            print("[DBG] get_locations(participants):", file=sys.stderr)
-            pprint.pprint(locations, stream=sys.stderr)
+            print("[DBG] locations.get_locations(participants):", file=sys.stderr)
+            pprint.pprint(locationlist, stream=sys.stderr)
 
     if args.fetchroute:
-        wps = [
-            {"latitude": loc.latitude, "longitude": loc.longitude} for loc in locations
-        ]
-        if args.debug:
-            print(wps)
-        distance = get_route(wps)
-        print(f"Expected distance: {distance} meters")
-        print(
-            "Routing provided by FOSSGIS, data © OpenStreetMap, ODbL, CC-BY-SA, contribute: https://openstreetmap.org/fixthemap"
-        )
+        route, length = routing.get_route(locationlist, args.debug)
+        if args.outfile:
+            if args.outfile == "-":
+                print("Route:", route, length, "meters")
+                for i in route:
+                    print(participants[i])
+            elif args.outfile and args.outfile != "-":
+                data_io.write_result(participants, route, args.outfile)
 
 
 if __name__ == "__main__":
