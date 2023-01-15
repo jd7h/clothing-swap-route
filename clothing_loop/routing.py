@@ -31,6 +31,9 @@ def query_osrm_distance_matrix(locationlist, debug=False):
 
     if debug:
         print(f"{len(comb_list)} items in distance matrix")
+        print(
+            f"Querying these from OSRM will take about {(2 * len(comb_list)) / 60} minutes."
+        )
     distances = {}
 
     for c in comb_list:

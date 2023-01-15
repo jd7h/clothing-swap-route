@@ -13,10 +13,12 @@ def read_participants(filename):
 
 def write_result(participants, route, outfilename):
     new_participants = []
-    for i in route:
-        new_participants.append(participants[i])
+    for idx, i in enumerate(route):
+        next_stop = participants[i]
+        next_stop["order"] = idx + 1
+        new_participants.append(next_stop)
     with open(outfilename, "w", newline="") as csvfile:
-        fieldnames = ["address", "postalcode", "city"]
+        fieldnames = [k for k in participants[0].keys() if k != "order"] + ["order"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for row in new_participants:
