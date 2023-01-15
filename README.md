@@ -23,6 +23,23 @@ Please refer to the [documentation of `pip`](https://pip.pypa.io/en/stable/insta
 4. Install the required dependencies: `pip install -r requirements.txt`
 5. Done!
 
+## Example
+
+After installation, run the following command to get a demonstration of the capabilities of the program:
+
+```
+source venv/bin/activate
+cd clothing_loop
+python -m main -d -g -r -i ../example_data/tiny_example.csv -o ../example_data/tiny_result.csv
+```
+
+This tells the program to 
+- turn **d**ebug mode on and print extra information about what the program is doing,
+- **g**et location data from Nominatim,
+- use OSRM **r**outing,
+- take `../example_data/tiny_example.csv` as **i**nput, and
+- write to `../example_data/tiny_result.csv` as **o**utput
+
 ## Contributions
 Contributions are welcome. :)
 
